@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PointCategoryResource\Pages;
-use App\Filament\Resources\PointCategoryResource\RelationManagers;
-use App\Models\PointCategory;
+use App\Filament\Resources\ClassRoomResource\Pages;
+use App\Filament\Resources\ClassRoomResource\RelationManagers;
+use App\Models\ClassRoom;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
-class PointCategoryResource extends Resource
+class ClassRoomResource extends Resource
 {
-    protected static ?string $model = PointCategory::class;
+    protected static ?string $model = ClassRoom::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -28,12 +28,14 @@ class PointCategoryResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->live()
-                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
-                    ->required(),
-                TextInput::make('slug')
-                    ->required(),
+                Section::make()->schema([
+                    TextInput::make('name')
+                        ->live()
+                        ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                        ->required(),
+                    TextInput::make('slug')
+                        ->required(),
+                ])
             ]);
     }
 
@@ -49,7 +51,6 @@ class PointCategoryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -58,10 +59,19 @@ class PointCategoryResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePointCategories::route('/'),
+            'index' => Pages\ListClassRooms::route('/'),
+            'create' => Pages\CreateClassRoom::route('/create'),
+            'edit' => Pages\EditClassRoom::route('/{record}/edit'),
         ];
     }
 }

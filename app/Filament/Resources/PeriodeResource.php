@@ -2,25 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PointCategoryResource\Pages;
-use App\Filament\Resources\PointCategoryResource\RelationManagers;
-use App\Models\PointCategory;
+use App\Filament\Resources\PeriodeResource\Pages;
+use App\Filament\Resources\PeriodeResource\RelationManagers;
+use App\Models\Periode;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Str;
 
-class PointCategoryResource extends Resource
+class PeriodeResource extends Resource
 {
-    protected static ?string $model = PointCategory::class;
+    protected static ?string $model = Periode::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -29,11 +26,7 @@ class PointCategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->live()
-                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
-                    ->required(),
-                TextInput::make('slug')
-                    ->required(),
+                    ->required()
             ]);
     }
 
@@ -41,8 +34,7 @@ class PointCategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('slug'),
+                TextColumn::make('name')
             ])
             ->filters([
                 //
@@ -61,7 +53,7 @@ class PointCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePointCategories::route('/'),
+            'index' => Pages\ManagePeriodes::route('/'),
         ];
     }
 }
